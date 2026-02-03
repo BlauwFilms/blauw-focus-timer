@@ -1,0 +1,253 @@
+<!-- Creative Focus Timer | Blauw Films Utility -->
+<div class="focus-timer-container" id="focusTimerApp">
+  <div class="focus-timer-wrapper">
+    <!-- Header -->
+    <div class="ft-header">
+      <h4 class="h4-rich-text-title ft-header-title">Creative Focus Timer</h4>
+      <div class="ft-header-actions">
+        <button class="dash_button dash_button--ghost" id="settingsToggle" aria-label="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+        <button class="dash_button dash_button--secondary" id="pipBtn" aria-label="Picture in Picture">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <rect x="12" y="9" width="8" height="6" rx="1" ry="1" fill="currentColor" opacity="0.3"></rect>
+            <line x1="2" y1="21" x2="8" y2="21"></line>
+          </svg>
+        </button>
+        <button class="dash_button dash_button--secondary" id="fullscreenBtn" aria-label="Enter fullscreen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mode Selector -->
+    <div class="ft-mode-selector" role="tablist" aria-label="Timer mode">
+      <button class="ft-mode-btn active" data-mode="pomodoro" role="tab" aria-selected="true">Pomodoro</button>
+      <button class="ft-mode-btn" data-mode="countdown" role="tab" aria-selected="false">Countdown</button>
+      <button class="ft-mode-btn" data-mode="stopwatch" role="tab" aria-selected="false">Stopwatch</button>
+      <button class="ft-mode-btn" data-mode="breathe" role="tab" aria-selected="false">Breathe</button>
+    </div>
+    
+    <!-- Settings Panel -->
+    <div class="ft-settings ft-section" id="settingsPanel">
+      <h5 class="ft-section-title">Settings</h5>
+      <div class="ft-tabs">
+        <button class="ft-tab active" data-tab="pomodoro-settings">Pomodoro</button>
+        <button class="ft-tab" data-tab="general-settings">General</button>
+      </div>
+      <div class="ft-tab-content active" id="pomodoro-settings">
+        <div class="ft-settings-grid">
+          <div class="ft-setting-group">
+            <label class="ft-setting-label rich-text-blauw-films" for="focusDuration">Focus (min)</label>
+            <input type="number" id="focusDuration" class="form-field ft-setting-input" value="25" min="1" max="120">
+          </div>
+          <div class="ft-setting-group">
+            <label class="ft-setting-label rich-text-blauw-films" for="shortBreakDuration">Short Break (min)</label>
+            <input type="number" id="shortBreakDuration" class="form-field ft-setting-input" value="5" min="1" max="30">
+          </div>
+          <div class="ft-setting-group">
+            <label class="ft-setting-label rich-text-blauw-films" for="longBreakDuration">Long Break (min)</label>
+            <input type="number" id="longBreakDuration" class="form-field ft-setting-input" value="15" min="1" max="60">
+          </div>
+          <div class="ft-setting-group">
+            <label class="ft-setting-label rich-text-blauw-films" for="cyclesBeforeLongBreak">Cycles before Long Break</label>
+            <input type="number" id="cyclesBeforeLongBreak" class="form-field ft-setting-input" value="4" min="2" max="10">
+          </div>
+        </div>
+      </div>
+      <div class="ft-tab-content" id="general-settings">
+        <div class="ft-settings-grid">
+          <div class="ft-setting-group">
+            <label class="ft-checkbox-label">
+              <input type="checkbox" class="ft-checkbox" id="soundEnabled">
+              <span class="rich-text-blauw-films">Enable sound notifications</span>
+            </label>
+          </div>
+          <div class="ft-setting-group">
+            <label class="ft-checkbox-label">
+              <input type="checkbox" class="ft-checkbox" id="autoStartBreaks" checked>
+              <span class="rich-text-blauw-films">Auto-start breaks</span>
+            </label>
+          </div>
+          <div class="ft-setting-group">
+            <label class="ft-checkbox-label">
+              <input type="checkbox" class="ft-checkbox" id="autoStartFocus" checked>
+              <span class="rich-text-blauw-films">Auto-start focus after break</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Timer Area -->
+    <div class="ft-main">
+      <div class="ft-progress-container" id="progressContainer">
+        <svg class="ft-progress-ring" width="200" height="200" viewBox="0 0 200 200">
+          <circle class="ft-progress-ring-bg" cx="100" cy="100" r="90" stroke-width="4"></circle>
+          <circle class="ft-progress-ring-progress" id="progressRing" cx="100" cy="100" r="90" stroke-width="4" stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+        </svg>
+      </div>
+      <div class="ft-timer-display" id="timerDisplay" aria-live="polite" aria-atomic="true">25:00</div>
+      <div class="ft-session-label" id="sessionLabel">Focus Time</div>
+      <div class="ft-active-task-container">
+        <div class="ft-active-task" id="activeTaskDisplay">No task selected</div>
+        <div class="ft-task-time-remaining" id="taskTimeRemaining"></div>
+      </div>
+      <div class="ft-controls">
+        <button class="dash_button dash_button--secondary ft-control-btn" id="resetBtn" aria-label="Reset timer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+        </button>
+        <button class="dash_button ft-control-btn ft-control-btn--primary" id="playPauseBtn" aria-label="Start timer">
+          <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+        <button class="dash_button dash_button--secondary ft-control-btn" id="skipBtn" aria-label="Skip to next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+            <line x1="19" y1="5" x2="19" y2="19"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="ft-break-buttons" id="breakButtons">
+        <button class="dash_button dash_button--secondary" id="shortBreakBtn">Short Break</button>
+        <button class="dash_button dash_button--secondary" id="longBreakBtn">Long Break</button>
+      </div>
+    </div>
+    
+    <!-- Breathing Exercise Section -->
+    <div class="ft-main ft-breathe-section" id="breatheSection" style="display: none;">
+      <div class="ft-breathe-container">
+        <div class="ft-breathe-circle" id="breatheCircle">
+          <div class="ft-breathe-inner-circle" id="breatheInnerCircle"></div>
+        </div>
+      </div>
+      <div class="ft-breathe-instruction" id="breatheInstruction">Press start to begin</div>
+      <div class="ft-breathe-timer" id="breatheTimer">4s</div>
+      <div class="ft-controls">
+        <button class="dash_button dash_button--secondary ft-control-btn" id="breatheResetBtn" aria-label="Reset breathing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+        </button>
+        <button class="dash_button ft-control-btn ft-control-btn--primary" id="breathePlayPauseBtn" aria-label="Start breathing exercise">
+          <svg id="breathePlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <svg id="breathePauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+      </div>
+      <div class="ft-breathe-patterns">
+        <button class="ft-breathe-pattern-btn active" data-pattern="relaxing" title="4-7-8 Relaxing Breath">Relaxing</button>
+        <button class="ft-breathe-pattern-btn" data-pattern="box" title="4-4-4-4 Box Breathing">Box</button>
+        <button class="ft-breathe-pattern-btn" data-pattern="energizing" title="4-4 Energizing Breath">Energizing</button>
+      </div>
+      <div class="ft-breathe-cycles" id="breatheCycles">Cycle 0 of 4</div>
+    </div>
+    
+    <!-- Tasks Section -->
+    <div class="ft-section">
+      <div class="ft-section-header">
+        <h5 class="ft-section-title">Tasks</h5>
+        <button class="dash_button dash_button--ghost" id="clearCompletedBtn">Clear Completed</button>
+      </div>
+      <div class="ft-task-input-row">
+        <input type="text" id="taskNameInput" class="form-field" placeholder="Add a task..." aria-label="Task name">
+        <input type="number" id="taskDurationInput" class="form-field ft-task-duration-input" placeholder="Min" min="1" aria-label="Task duration in minutes">
+        <button class="dash_button" id="addTaskBtn">Add</button>
+      </div>
+      <ul class="ft-task-list" id="taskList" aria-label="Task list"></ul>
+      <div class="ft-empty-state" id="emptyTaskState">No tasks yet. Add one above to get started.</div>
+    </div>
+    
+    <!-- Statistics Section -->
+    <div class="ft-section">
+      <div class="ft-section-header">
+        <h5 class="ft-section-title">Today's Progress</h5>
+        <button class="dash_button dash_button--ghost" id="resetStatsBtn">Reset</button>
+      </div>
+      <div class="ft-stats-grid">
+        <div class="ft-stat-card">
+          <div class="ft-stat-value" id="statFocusTime">0h 0m</div>
+          <div class="ft-stat-label">Focus Time</div>
+        </div>
+        <div class="ft-stat-card">
+          <div class="ft-stat-value" id="statTasksCompleted">0</div>
+          <div class="ft-stat-label">Tasks Done</div>
+        </div>
+        <div class="ft-stat-card">
+          <div class="ft-stat-value" id="statPomodoros">0</div>
+          <div class="ft-stat-label">Pomodoros</div>
+        </div>
+        <div class="ft-stat-card">
+          <div class="ft-stat-value" id="statSessions">0</div>
+          <div class="ft-stat-label">Sessions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Fullscreen Overlay -->
+  <div class="ft-fullscreen-overlay" id="fullscreenOverlay">
+    <button class="dash_button dash_button--ghost ft-fullscreen-close" id="exitFullscreenBtn" aria-label="Exit fullscreen">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="ft-progress-container">
+      <svg class="ft-progress-ring" width="280" height="280" viewBox="0 0 280 280">
+        <circle class="ft-progress-ring-bg" cx="140" cy="140" r="130" stroke-width="4"></circle>
+        <circle class="ft-progress-ring-progress" id="fullscreenProgressRing" cx="140" cy="140" r="130" stroke-width="4" stroke-dasharray="816.81" stroke-dashoffset="0"></circle>
+      </svg>
+    </div>
+    <div class="ft-timer-display" id="fullscreenTimerDisplay">25:00</div>
+    <div class="ft-session-label" id="fullscreenSessionLabel">Focus Time</div>
+    <div class="ft-active-task" id="fullscreenActiveTask">No task selected</div>
+    <div class="ft-task-time-remaining" id="fullscreenTaskTimeRemaining"></div>
+    <div class="ft-fullscreen-controls">
+      <button class="dash_button dash_button--secondary ft-control-btn" id="fullscreenResetBtn" aria-label="Reset timer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+      </button>
+      <button class="dash_button ft-control-btn ft-control-btn--primary" id="fullscreenPlayPauseBtn" aria-label="Start timer">
+        <svg id="fullscreenPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <svg id="fullscreenPauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+      </button>
+      <button class="dash_button dash_button--secondary ft-control-btn" id="fullscreenSkipBtn" aria-label="Skip to next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Resume Session Modal -->
+  <div class="ft-modal-overlay" id="resumeModal">
+    <div class="ft-modal">
+      <h4 class="ft-modal-title">Resume Session?</h4>
+      <p class="ft-modal-text rich-text-blauw-films">You have an unfinished session. Would you like to continue where you left off?</p>
+      <div class="ft-modal-actions">
+        <button class="dash_button dash_button--secondary" id="discardSessionBtn">Start Fresh</button>
+        <button class="dash_button" id="resumeSessionBtn">Resume</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden elements for PiP and audio -->
+<audio id="notificationSound" preload="auto">
+  <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwmHAAAAAAD/+9DEAAAH8ANpUAAABMgJbapAAACqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//tQxAADwAADSAAAAAAAANIAAAAQqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" type="audio/mpeg">
+</audio>
+<canvas id="pipCanvas" width="400" height="300" style="display:none;"></canvas>
+<video id="pipVideo" style="display:none;" muted></video>

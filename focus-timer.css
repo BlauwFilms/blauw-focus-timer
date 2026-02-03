@@ -80,13 +80,15 @@
 
 .focus-timer-container .dash_button--ghost {
   background: transparent;
-  color: #666;
-  padding: 0.5rem 0.75rem;
+  color: #1a1a1a;
+  padding: 0.5rem;
+  opacity: 0.6;
+  border: none;
 }
 
 .focus-timer-container .dash_button--ghost:hover {
-  background: rgba(0,0,0,0.05);
-  color: #1a1a1a;
+  background: transparent;
+  opacity: 1;
 }
 
 .ft-header {
@@ -197,7 +199,7 @@
 
 .ft-controls {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
@@ -211,25 +213,38 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  opacity: 0.6;
+}
+
+.ft-control-btn:hover {
+  opacity: 1;
+  background: transparent;
 }
 
 .ft-control-btn svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  stroke: #1a1a1a;
 }
 
 .ft-control-btn--primary {
   width: 4.5rem;
   height: 4.5rem;
   background: #1451eb;
+  opacity: 1;
 }
 
-.ft-control-btn--primary:hover { background: #112347; }
+.ft-control-btn--primary:hover { background: #112347; opacity: 1; }
 
 .ft-control-btn--primary svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   fill: #fff;
+  stroke: none;
 }
 
 .ft-progress-container {
@@ -237,7 +252,7 @@
   margin-bottom: 1.5rem;
 }
 
-.ft-progress-ring { transform: rotate(-90deg); }
+.ft-progress-ring { transform: rotate(-90deg) scaleX(-1); }
 .ft-progress-ring-bg { fill: none; stroke: #e0e0e0; }
 
 .ft-progress-ring-progress {
@@ -472,6 +487,69 @@
 }
 
 .ft-fullscreen-overlay:hover .ft-fullscreen-close { opacity: 1; }
+
+/* Fullscreen Breathing Mode */
+.ft-fullscreen-breathe {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ft-fullscreen-overlay.breathe-mode .ft-progress-container,
+.ft-fullscreen-overlay.breathe-mode .ft-timer-display,
+.ft-fullscreen-overlay.breathe-mode .ft-session-label,
+.ft-fullscreen-overlay.breathe-mode .ft-active-task,
+.ft-fullscreen-overlay.breathe-mode .ft-task-time-remaining {
+  display: none;
+}
+
+.ft-fullscreen-overlay.breathe-mode .ft-fullscreen-breathe {
+  display: flex;
+}
+
+.ft-breathe-container--large {
+  width: 280px;
+  height: 280px;
+  margin-bottom: 2rem;
+}
+
+.ft-breathe-circle--large {
+  width: 280px;
+  height: 280px;
+}
+
+.ft-breathe-circle--large .ft-breathe-inner-circle {
+  width: 50px;
+  height: 50px;
+}
+
+.ft-breathe-circle--large .ft-breathe-inner-circle.inhale {
+  animation: breatheInhaleLarge var(--inhale-duration, 4s) ease-in-out forwards;
+}
+
+.ft-breathe-circle--large .ft-breathe-inner-circle.hold-in {
+  width: 272px;
+  height: 272px;
+}
+
+.ft-breathe-circle--large .ft-breathe-inner-circle.exhale {
+  animation: breatheExhaleLarge var(--exhale-duration, 8s) ease-in-out forwards;
+}
+
+.ft-breathe-circle--large .ft-breathe-inner-circle.hold-out {
+  width: 50px;
+  height: 50px;
+}
+
+@keyframes breatheInhaleLarge {
+  0% { width: 50px; height: 50px; opacity: 0.15; }
+  100% { width: 272px; height: 272px; opacity: 0.3; }
+}
+
+@keyframes breatheExhaleLarge {
+  0% { width: 272px; height: 272px; opacity: 0.3; }
+  100% { width: 50px; height: 50px; opacity: 0.15; }
+}
 
 .ft-modal-overlay {
   display: none;

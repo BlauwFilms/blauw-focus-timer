@@ -46,7 +46,8 @@
       'resetStatsBtn','notificationSound','focusDuration','shortBreakDuration','longBreakDuration','cyclesBeforeLongBreak',
       'soundEnabled','autoStartBreaks','autoStartFocus','statFocusTime','statTasksCompleted','statPomodoros','statSessions',
       'breatheSection','breatheInnerCircle','breatheInstruction','breatheTimer','breathePlayPauseBtn','breathePlayIcon',
-      'breathePauseIcon','breatheResetBtn','breatheCycles'];
+      'breathePauseIcon','breatheResetBtn','breatheCycles','fullscreenBreathe','fullscreenBreatheInnerCircle',
+      'fullscreenBreatheInstruction','fullscreenBreatheTimer','fullscreenBreatheCycles'];
     ids.forEach(id => el[id] = $('#' + id));
   }
 
@@ -240,7 +241,15 @@
 
   function openFullscreen() { 
     const overlay = el.fullscreenOverlay;
-    overlay.classList.add('open'); 
+    
+    // If in breathe mode, switch the fullscreen content
+    if (state.mode === 'breathe') {
+      overlay.classList.add('open', 'breathe-mode');
+    } else {
+      overlay.classList.add('open');
+      overlay.classList.remove('breathe-mode');
+    }
+    
     document.body.style.overflow = 'hidden';
     // Request native fullscreen
     const elem = overlay;
@@ -249,7 +258,7 @@
     else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
   }
   function closeFullscreen() { 
-    el.fullscreenOverlay.classList.remove('open'); 
+    el.fullscreenOverlay.classList.remove('open', 'breathe-mode'); 
     document.body.style.overflow = '';
     // Exit native fullscreen
     if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
@@ -258,7 +267,15 @@
       else if (document.msExitFullscreen) document.msExitFullscreen();
     }
   }
-  function playNotificationSound() { if (!state.settings.soundEnabled) return; try { el.notificationSound.currentTime = 0; el.notificationSound.play().catch(() => {}); } catch(e) {} }
+  function playNotificationSound() { 
+    if (!state.settings.soundEnabled) return; 
+    try { 
+      // Use the wind chime sound from GitHub
+      const sound = new Audio('https://cdn.jsdelivr.net/gh/BlauwFilms/blauw-focus-timer@v1.0.1/WindChime_Bell_Sound.mp3');
+      sound.volume = 0.5;
+      sound.play().catch(() => {}); 
+    } catch(e) {} 
+  }
 
   let pipVideo = null, pipAnimationFrame = null;
   function initPiP() { pipVideo = $('#pipVideo'); const c = $('#pipCanvas'); pipVideo.srcObject = c.captureStream(30); }
@@ -297,24 +314,90 @@
 
   function startBreathing() { if (breatheInterval) return; breatheState.isRunning = true; if (breatheState.phase === 'idle') { breatheState.currentCycle = 1; startBreathPhase('inhale'); } else continueBreathPhase(); updateBreathePlayButton(); }
   function stopBreathing() { breatheState.isRunning = false; if (breatheInterval) { clearInterval(breatheInterval); breatheInterval = null; } updateBreathePlayButton(); }
-  function resetBreathing() { stopBreathing(); breatheState.phase = 'idle'; breatheState.phaseTime = 0; breatheState.currentCycle = 0; const p = breathePatterns[breatheState.pattern]; breatheState.totalCycles = p.cycles; el.breatheInnerCircle.className = 'ft-breathe-inner-circle'; el.breatheInstruction.textContent = 'Press start to begin'; el.breatheTimer.textContent = `${p.inhale}s`; el.breatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`; updateBreathePlayButton(); }
+  function resetBreathing() { 
+    stopBreathing(); 
+    breatheState.phase = 'idle'; 
+    breatheState.phaseTime = 0; 
+    breatheState.currentCycle = 0; 
+    const p = breathePatterns[breatheState.pattern]; 
+    breatheState.totalCycles = p.cycles; 
+    el.breatheInnerCircle.className = 'ft-breathe-inner-circle'; 
+    el.breatheInstruction.textContent = 'Press start to begin'; 
+    el.breatheTimer.textContent = `${p.inhale}s`; 
+    el.breatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`; 
+    // Sync fullscreen
+    if (el.fullscreenBreatheInnerCircle) {
+      el.fullscreenBreatheInnerCircle.className = 'ft-breathe-inner-circle';
+      el.fullscreenBreatheInstruction.textContent = 'Press start to begin';
+      el.fullscreenBreatheTimer.textContent = `${p.inhale}s`;
+      el.fullscreenBreatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`;
+    }
+    updateBreathePlayButton(); 
+  }
   function startBreathPhase(phase) {
     const p = breathePatterns[breatheState.pattern]; breatheState.phase = phase;
     let dur = 0, instr = '';
-    if (phase === 'inhale') { dur = p.inhale; instr = 'Breathe in'; el.breatheInnerCircle.style.setProperty('--inhale-duration', `${dur}s`); }
+    if (phase === 'inhale') { dur = p.inhale; instr = 'Breathe in'; el.breatheInnerCircle.style.setProperty('--inhale-duration', `${dur}s`); if (el.fullscreenBreatheInnerCircle) el.fullscreenBreatheInnerCircle.style.setProperty('--inhale-duration', `${dur}s`); }
     else if (phase === 'hold-in') { dur = p.holdIn; instr = 'Hold'; }
-    else if (phase === 'exhale') { dur = p.exhale; instr = 'Breathe out'; el.breatheInnerCircle.style.setProperty('--exhale-duration', `${dur}s`); }
+    else if (phase === 'exhale') { dur = p.exhale; instr = 'Breathe out'; el.breatheInnerCircle.style.setProperty('--exhale-duration', `${dur}s`); if (el.fullscreenBreatheInnerCircle) el.fullscreenBreatheInnerCircle.style.setProperty('--exhale-duration', `${dur}s`); }
     else if (phase === 'hold-out') { dur = p.holdOut; instr = 'Hold'; }
     if (dur === 0) { nextBreathPhase(); return; }
-    breatheState.phaseTime = dur; el.breatheInnerCircle.className = 'ft-breathe-inner-circle ' + phase;
-    el.breatheInstruction.textContent = instr; el.breatheTimer.textContent = `${dur}s`; el.breatheCycles.textContent = `Cycle ${breatheState.currentCycle} of ${breatheState.totalCycles}`;
-    breatheInterval = setInterval(() => { breatheState.phaseTime--; if (breatheState.phaseTime <= 0) { clearInterval(breatheInterval); breatheInterval = null; nextBreathPhase(); } else { el.breatheTimer.textContent = `${breatheState.phaseTime}s`; updatePiPIfActive(); } }, 1000);
+    breatheState.phaseTime = dur; 
+    el.breatheInnerCircle.className = 'ft-breathe-inner-circle ' + phase;
+    el.breatheInstruction.textContent = instr; 
+    el.breatheTimer.textContent = `${dur}s`; 
+    el.breatheCycles.textContent = `Cycle ${breatheState.currentCycle} of ${breatheState.totalCycles}`;
+    // Sync fullscreen
+    if (el.fullscreenBreatheInnerCircle) {
+      el.fullscreenBreatheInnerCircle.className = 'ft-breathe-inner-circle ' + phase;
+      el.fullscreenBreatheInstruction.textContent = instr;
+      el.fullscreenBreatheTimer.textContent = `${dur}s`;
+      el.fullscreenBreatheCycles.textContent = `Cycle ${breatheState.currentCycle} of ${breatheState.totalCycles}`;
+    }
+    breatheInterval = setInterval(() => { 
+      breatheState.phaseTime--; 
+      if (breatheState.phaseTime <= 0) { clearInterval(breatheInterval); breatheInterval = null; nextBreathPhase(); } 
+      else { 
+        el.breatheTimer.textContent = `${breatheState.phaseTime}s`; 
+        if (el.fullscreenBreatheTimer) el.fullscreenBreatheTimer.textContent = `${breatheState.phaseTime}s`;
+        updatePiPIfActive(); 
+      } 
+    }, 1000);
   }
   function continueBreathPhase() { el.breatheInstruction.textContent = getPhaseInstruction(breatheState.phase); breatheInterval = setInterval(() => { breatheState.phaseTime--; if (breatheState.phaseTime <= 0) { clearInterval(breatheInterval); breatheInterval = null; nextBreathPhase(); } else { el.breatheTimer.textContent = `${breatheState.phaseTime}s`; updatePiPIfActive(); } }, 1000); }
   function getPhaseInstruction(p) { return p === 'inhale' ? 'Breathe in' : p === 'hold-in' ? 'Hold' : p === 'exhale' ? 'Breathe out' : p === 'hold-out' ? 'Hold' : ''; }
   function nextBreathPhase() { const p = breathePatterns[breatheState.pattern]; if (breatheState.phase === 'inhale') p.holdIn > 0 ? startBreathPhase('hold-in') : startBreathPhase('exhale'); else if (breatheState.phase === 'hold-in') startBreathPhase('exhale'); else if (breatheState.phase === 'exhale') p.holdOut > 0 ? startBreathPhase('hold-out') : completeCycle(); else completeCycle(); }
   function completeCycle() { if (breatheState.currentCycle >= breatheState.totalCycles) completeBreathingExercise(); else { breatheState.currentCycle++; startBreathPhase('inhale'); } }
-  function completeBreathingExercise() { stopBreathing(); breatheState.phase = 'idle'; el.breatheInnerCircle.className = 'ft-breathe-inner-circle'; el.breatheInstruction.textContent = 'Complete'; el.breatheTimer.textContent = '—'; el.breatheCycles.textContent = `${breatheState.totalCycles} cycles completed`; if (state.settings.soundEnabled) playNotificationSound(); setTimeout(() => { if (breatheState.phase === 'idle' && !breatheState.isRunning) { el.breatheInstruction.textContent = 'Press start to begin again'; el.breatheTimer.textContent = `${breathePatterns[breatheState.pattern].inhale}s`; breatheState.currentCycle = 0; el.breatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`; } }, 3000); }
+  function completeBreathingExercise() { 
+    stopBreathing(); 
+    breatheState.phase = 'idle'; 
+    el.breatheInnerCircle.className = 'ft-breathe-inner-circle'; 
+    el.breatheInstruction.textContent = 'Complete'; 
+    el.breatheTimer.textContent = '—'; 
+    el.breatheCycles.textContent = `${breatheState.totalCycles} cycles completed`; 
+    // Sync fullscreen
+    if (el.fullscreenBreatheInnerCircle) {
+      el.fullscreenBreatheInnerCircle.className = 'ft-breathe-inner-circle';
+      el.fullscreenBreatheInstruction.textContent = 'Complete';
+      el.fullscreenBreatheTimer.textContent = '—';
+      el.fullscreenBreatheCycles.textContent = `${breatheState.totalCycles} cycles completed`;
+    }
+    if (state.settings.soundEnabled) playNotificationSound(); 
+    setTimeout(() => { 
+      if (breatheState.phase === 'idle' && !breatheState.isRunning) { 
+        el.breatheInstruction.textContent = 'Press start to begin again'; 
+        el.breatheTimer.textContent = `${breathePatterns[breatheState.pattern].inhale}s`; 
+        breatheState.currentCycle = 0; 
+        el.breatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`; 
+        // Sync fullscreen
+        if (el.fullscreenBreatheInstruction) {
+          el.fullscreenBreatheInstruction.textContent = 'Press start to begin again';
+          el.fullscreenBreatheTimer.textContent = `${breathePatterns[breatheState.pattern].inhale}s`;
+          el.fullscreenBreatheCycles.textContent = `Cycle 0 of ${breatheState.totalCycles}`;
+        }
+      } 
+    }, 3000); 
+  }
   function setBreathingPattern(n) { if (breatheState.isRunning) stopBreathing(); breatheState.pattern = n; $$('.ft-breathe-pattern-btn').forEach(b => b.classList.toggle('active', b.dataset.pattern === n)); resetBreathing(); }
   function updateBreathePlayButton() { const r = breatheState.isRunning; el.breathePlayIcon.style.display = r ? 'none' : 'block'; el.breathePauseIcon.style.display = r ? 'block' : 'none'; el.breathePlayPauseBtn.setAttribute('aria-label', r ? 'Pause breathing' : 'Start breathing exercise'); }
 

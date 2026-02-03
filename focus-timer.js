@@ -238,8 +238,26 @@
     saveState();
   }
 
-  function openFullscreen() { el.fullscreenOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function closeFullscreen() { el.fullscreenOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  function openFullscreen() { 
+    const overlay = el.fullscreenOverlay;
+    overlay.classList.add('open'); 
+    document.body.style.overflow = 'hidden';
+    // Request native fullscreen
+    const elem = overlay;
+    if (elem.requestFullscreen) elem.requestFullscreen();
+    else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+  }
+  function closeFullscreen() { 
+    el.fullscreenOverlay.classList.remove('open'); 
+    document.body.style.overflow = '';
+    // Exit native fullscreen
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    }
+  }
   function playNotificationSound() { if (!state.settings.soundEnabled) return; try { el.notificationSound.currentTime = 0; el.notificationSound.play().catch(() => {}); } catch(e) {} }
 
   let pipVideo = null, pipAnimationFrame = null;
@@ -311,6 +329,16 @@
     });
   }
 
+  function handleFullscreenChange() {
+    // If we exited native fullscreen but overlay is still open, close it
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+      if (el.fullscreenOverlay.classList.contains('open')) {
+        el.fullscreenOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+  }
+
   function handleKeyboard(e) {
     if (e.target.tagName === 'INPUT') return;
     if (e.code === 'Space') { e.preventDefault(); state.mode === 'breathe' ? (breatheState.isRunning ? stopBreathing() : startBreathing()) : (state.isRunning ? pauseTimer() : startTimer()); }
@@ -345,6 +373,10 @@
     el.breatheResetBtn.addEventListener('click', resetBreathing);
     $$('.ft-breathe-pattern-btn').forEach(b => b.addEventListener('click', () => setBreathingPattern(b.dataset.pattern)));
     document.addEventListener('keydown', handleKeyboard);
+    // Sync overlay state when native fullscreen is exited (e.g., via Escape)
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('msfullscreenchange', handleFullscreenChange);
     window.addEventListener('beforeunload', () => { saveState(); saveStats(); });
   }
 

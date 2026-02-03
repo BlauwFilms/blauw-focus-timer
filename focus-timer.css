@@ -22,7 +22,7 @@
   padding: 2rem;
 }
 
-.h4-rich-text-title {
+.focus-timer-container .h4-rich-text-title {
   font-weight: 300;
   font-size: 1.5rem;
   color: #1a1a1a;
@@ -30,14 +30,14 @@
   letter-spacing: -0.01em;
 }
 
-.rich-text-blauw-films {
+.focus-timer-container .rich-text-blauw-films {
   font-weight: 400;
   font-size: 0.875rem;
   color: #1a1a1a;
   line-height: 1.5;
 }
 
-.form-field {
+.focus-timer-container .form-field {
   width: 100%;
   padding: 0.75rem 1rem;
   font-family: 'Roboto', sans-serif;
@@ -50,10 +50,10 @@
   transition: border-color 0.2s ease;
 }
 
-.form-field:focus { border-color: #1451eb; }
-.form-field::placeholder { color: #999; }
+.focus-timer-container .form-field:focus { border-color: #1451eb; }
+.focus-timer-container .form-field::placeholder { color: #999; }
 
-.dash_button {
+.focus-timer-container .dash_button {
   padding: 0.75rem 1.5rem;
   font-family: 'Roboto', sans-serif;
   font-size: 0.875rem;
@@ -67,24 +67,24 @@
   white-space: nowrap;
 }
 
-.dash_button:hover { background: #112347; }
-.dash_button:disabled { opacity: 0.5; cursor: not-allowed; }
+.focus-timer-container .dash_button:hover { background: #112347; }
+.focus-timer-container .dash_button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.dash_button--secondary {
+.focus-timer-container .dash_button--secondary {
   background: transparent;
   color: #1a1a1a;
   border: 1px solid #dadada;
 }
 
-.dash_button--secondary:hover { background: #dadada; }
+.focus-timer-container .dash_button--secondary:hover { background: #dadada; }
 
-.dash_button--ghost {
+.focus-timer-container .dash_button--ghost {
   background: transparent;
   color: #666;
   padding: 0.5rem 0.75rem;
 }
 
-.dash_button--ghost:hover {
+.focus-timer-container .dash_button--ghost:hover {
   background: rgba(0,0,0,0.05);
   color: #1a1a1a;
 }
